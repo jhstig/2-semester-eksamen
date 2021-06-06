@@ -1,4 +1,6 @@
-<?php include("templates/header.php");
+<?php
+session_start();
+include("templates/header.php");
 
 echo $_SESSION['user'];
 

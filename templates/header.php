@@ -1,16 +1,16 @@
-<?php 
-session_start();
+<?php
+
 $fanTitle;
 include("scripts/functions.php");
 
 $inclDB = true;
 
 if($inclDB == true) {
-    
-    define('DBHOST', 'localhost');  
-    define('DBPASS', 'root');        
+
+    define('DBHOST', 'localhost');
+    define('DBPASS', 'root');
     define('DBUSER', 'root');
-    define('DBNAME', 'mydb');    
+    define('DBNAME', 'mydb');
 
     connect();
 }
@@ -44,12 +44,12 @@ if($inclDB == true) {
                 <li class="nav-item">
                     <a class="nav-link" href="index.php" >Se auktioner</a>
                 </li>
-                
+
                 <li class="nav-item">
                     <?php if($_SESSION['user'] == null){
                         echo '<a class="nav-link" href="login.php">Log ind</a>';
                     } else {
-                        echo '<a class="nav-link" href="scripts/logout.php">Log ud</a>';
+                        echo '<a class="nav-link" href="login.php">Log ud</a>';
                     }
                     ?>
                 </li>

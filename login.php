@@ -1,8 +1,10 @@
 
-<?php 
+<?php
 $fanTitle = "Login";
-
+session_start();
+$_SESSION['user'] = null;
 include("templates/header.php");
+
 
 if(isset($_POST['login_email']) && isset($_POST['login_password']) && !empty($_POST['login_password']) && !empty($_POST['login_email'])){
     $_SESSION['user'] = $_POST['login_email'];
