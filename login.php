@@ -12,7 +12,20 @@ if(isset($_POST['login_email']) && isset($_POST['login_password']) && !empty($_P
     header("Location: index.php");
     exit;
 }
+if (isset($_POST['create_firstname']) && !empty($_POST['create_firstname'])) {
+$firstname = $_POST['create_firstname'];
+$lastname = $_POST['create_surname'];
+$email = $_POST['create_email'];
+$password = $_POST['create_password'];
+$Phonenumber = $_POST['phone_number'];
+$streetname = $_POST['Street_name'];
+$streetname2 = $_POST['Street_name2'];
+$zipcode = $_POST['zip_code'];
+$cityname = $_POST['City_name'];
+$housenumber = $_POST['House_number'];
 
+insertaddresses ($streetname, $streetname2, $housenumber, $zipcode);
+}
 
 ?>
 <div class="container h-100 align-items-center">
@@ -27,17 +40,39 @@ if(isset($_POST['login_email']) && isset($_POST['login_password']) && !empty($_P
         </div>
         <div class="col-md-6 ikea-yellow-bg pt-5">
             <span class="h3 font-weight-bold ikea-blue-text">INGEN BRUGER? OPRET EN</span>
-            <form action="login.php" method="post" class="mt-4">
+            <form action="login.php" method="post" class="mt-4" >
                 <div class="row form-group justify-content-around">
                     <div class="col-6">
-                        <input name="create_firstname" type="text" class="form-control" placeholder="Fornavn">
+                        <input name="create_firstname" type="text" class="form-control" placeholder="Fornavn" required>
                     </div>
                     <div class="col-6">
-                        <input name="create_surname" type="text" class="form-control" placeholder="Efternavn">
+                        <input name="create_surname" type="text" class="form-control" placeholder="Efternavn" required>
                     </div>
                 </div>
-                <div class="form-group"><input name="create_email" type="email" class="form-control" placeholder="Email"></div>
-                <div class="form-group"><input name="create_password" type="password" class="form-control" placeholder="Kodeord"></div>
+                <div class="form-group">
+                  <input name="create_email" type="email" class="form-control" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                  <input name="create_password" type="password" class="form-control" placeholder="Kodeord" required>
+                </div>
+                <div class="form-group">
+                  <input name="phone_number" type=number class="form-control" placeholder="Telefonnummer" required>
+                </div>
+                <div class="form-group">
+                  <input name="Street_name" type="address" class="form-control" placeholder="Adresse" required>
+                </div>
+                  <div class="form-group">
+                    <input name="Street_name2" type="address" class="form-control" placeholder="Adresse 2">
+              </div>
+                <div class="form-group">
+                  <input name="House_number" type="House_number" class="form-control" placeholder="Hus nr." required>
+                </div>
+                <div class="form-group">
+                  <input name="zip_code" type="zipcode" class="form-control" placeholder="Postnummer" required>
+                </div>
+                <div class="form-group">
+                  <input name="City_name" type="cityname" class="form-control" placeholder="By"required>
+                </div>
                 <div class="form-group"><div class="form-group"><button type="submit" class="btn btn-block">Opret bruger</button></div></div>
             </form>
         </div>

@@ -64,5 +64,34 @@ function getGreatestBid($auction) {
     }
   }
   return $bids;
-  
+
+}
+
+function getCity($zip) {
+  global $conn;
+  $sql = "SELECT city_name FROM zip_codes WHERE zip_code = '$zip'";
+  $city = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $city[] = $row;
+    }
+  }
+  return $city;
+
+}
+
+function insertaddresses($streetname, $streetname2, $housenumber, $zipcode){
+  global $conn;
+  $sql = "INSERT INTO adresses (address_id, street_name, street_name2, house_number, zip_code)
+  VALUES (null, '$streetname', '$streetname2', '$housenumber', '$zipcode')";
+
+  $result = mysqli_query($conn, $sql);
+}
+
+function insertusers(){
+
+
+
+
+
 }
