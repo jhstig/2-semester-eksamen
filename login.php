@@ -17,15 +17,16 @@ $firstname = $_POST['create_firstname'];
 $lastname = $_POST['create_surname'];
 $email = $_POST['create_email'];
 $password = $_POST['create_password'];
-$Phonenumber = $_POST['phone_number'];
+$phonenumber = $_POST['phone_number'];
 $streetname = $_POST['Street_name'];
 $streetname2 = $_POST['Street_name2'];
 $zipcode = $_POST['zip_code'];
 $cityname = $_POST['City_name'];
 $housenumber = $_POST['House_number'];
 
-insertaddresses ($streetname, $streetname2, $housenumber, $zipcode);
+insertaddresses($streetname, $streetname2, $housenumber, $zipcode, $firstname, $lastname, $password, $email, $phonenumber);
 }
+
 
 ?>
 <div class="container h-100 align-items-center">

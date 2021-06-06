@@ -80,18 +80,17 @@ function getCity($zip) {
 
 }
 
-function insertaddresses($streetname, $streetname2, $housenumber, $zipcode){
+function insertaddresses($streetname, $streetname2, $housenumber, $zipcode, $firstname, $lastname, $password, $email, $phonenumber){
   global $conn;
   $sql = "INSERT INTO adresses (address_id, street_name, street_name2, house_number, zip_code)
   VALUES (null, '$streetname', '$streetname2', '$housenumber', '$zipcode')";
 
   $result = mysqli_query($conn, $sql);
-}
+  $lastid = mysqli_insert_id($conn);
 
-function insertusers(){
+  $sql = "INSERT INTO users (user_id, first_name, last_name, password, email, phone_number, address_id)
+  VALUES (null, '$firstname', '$lastname', '$password', '$email', '$phonenumber','$lastid')";
 
-
-
-
+  $result = mysqli_query($conn, $sql);
 
 }
