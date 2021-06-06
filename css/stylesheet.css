@@ -1,0 +1,28 @@
+body {
+    font-family: "Arial";
+    background-color:#0058a2;
+}
+.ikea-blue-bg{
+    background-color:#0058a2;
+}
+.ikea-yellow-bg{
+    background-color:#ffdb00;
+}
+.ikea-yellow-text{
+    color:#ffdb00;
+}
+.ikea-blue-text{
+    color:#0058a2;
+}
+.col-custom {
+    border: solid 1px black;
+}
+.box-footer-custom {
+    border-top: solid 1px black;
+}
+.box-content-custom{
+    border-top: solid 1px black;
+}
+.box-me-custom{
+    border: solid 1px black;
+}
