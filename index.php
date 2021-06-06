@@ -4,10 +4,9 @@ include("templates/header.php");
 
 echo $_SESSION['user'];
 
-
-$amountLamps = 4;
-$amountTables = 3;
-$amountChairs = 6;
+$amountLamps = 0;
+$amountTables = 0;
+$amountChairs = 0;
 $currentTime = $_SERVER['REQUEST_TIME'];
 if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
     if($_GET['search'] == ""){
@@ -18,8 +17,7 @@ if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
         echo "<br>";
         echo "Kategorifelt: " . $_GET['cat'];
     }
-}
-?>
+} ?>
 <div class="container-fluid mt-5">
     <form action="index.php" method="get" class="form-group">
         <div class="form-row justify-content-center">
@@ -43,7 +41,6 @@ if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
                     <option value="created_max">Nyeste først</option>
                     <option value="price_max">Dyreste først</option>
                     <option value="price_min">Billigste først</option>
-
                 </select>
             </div>
             <div class="col-1 form-group">
@@ -58,7 +55,6 @@ if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
         <?php echo count(getAllAuctions());
             for ($i = 0; $i < count(getAllAuctions()); $i++) {
                 $auctionid = getAllAuctions()[$i]['auction_id'];
-                $currentBid;
                 if(count(getGreatestBid($auctionid))>0){
                   $currentBid = getGreatestBid($auctionid)[0]['bid_amount'];
                 } else {
@@ -73,9 +69,7 @@ if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
 
                 include("components/product-showcase-element.php");
             }
-
         ?>
-
         <!-- to here -->
     </div>
 </div>
