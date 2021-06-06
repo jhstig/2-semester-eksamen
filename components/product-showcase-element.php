@@ -1,7 +1,7 @@
 <?php
 $expired = 0;
 ?>
-<div class="col-md-3 m-4 border rounded" style="background-color:white;"> 
+<div class="col-md-3 m-4 border rounded" style="background-color:white;">
     <div class="row">
         <div class="col text-center mt-3">
             <span class="font-weight-bold h3"><?php echo $title; ?></span>
@@ -21,7 +21,7 @@ $expired = 0;
         <div class="col text-center">
             Sælger: <span><?php echo $seller; ?></span>
             <br>
-            Auktionen udløber om 
+            Auktionen udløber om
             <?php
                 if($expiresIn/60/60 >= 24) {
                     echo round($expiresIn/60/60/24) . " dage";
@@ -42,7 +42,7 @@ $expired = 0;
                 <div class="col text-center my-2">
                     <span class="mb-2">
                         Bud: <?php echo $currentBid; ?> kr.
-                        
+
                     </span>
                 </div>
             </div>

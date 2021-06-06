@@ -1,4 +1,4 @@
-<?php include("templates/header.php"); 
+<?php include("templates/header.php");
 
 echo $_SESSION['user'];
 
@@ -41,7 +41,7 @@ if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
                     <option value="created_max">Nyeste først</option>
                     <option value="price_max">Dyreste først</option>
                     <option value="price_min">Billigste først</option>
-                    
+
                 </select>
             </div>
             <div class="col-1 form-group">
@@ -53,19 +53,25 @@ if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
 <div class="container-fluid">
     <div class="row justify-content-center">
         <!-- loop from here -->
-        <?php
-            for ($i = 1; $i <= 20; $i++) {
-                $currentBid = 100;
-                $title = "Malmö";
-                $img = "img/placeholder.png";
-                $seller = "Claus P.";
-                $content = "ltr hawiult awiulyritylw utawy iuwqtyi awgtiua wytwai ytiqty wqity wiult awiltr wiuty auytwa ighskdjhgtiuyeair ydsiytw8ie tuy wjth awjth waukltr hawiult awiulyritylw utawy";
-                $expirationDate = time() + (1*24*60*60) + 1; //1 week from now
+        <?php echo count(getAllAuctions());
+            for ($i = 0; $i < count(getAllAuctions()); $i++) {
+                $auctionid = getAllAuctions()[$i]['auction_id'];
+                $currentBid;
+                if(count(getGreatestBid($auctionid))>0){
+                  $currentBid = getGreatestBid($auctionid)[0]['bid_amount'];
+                } else {
+                  $currentBid = getAllAuctions()[$i]['min_bid'];
+                }
+                $title = getAllAuctions()[$i]['title'];
+                $img = "img/" . getAllAuctions()[$i]['image'];
+                $seller = getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['first_name'] . " " . getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['last_name'][0] . ".";
+                $content = getAllAuctions()[$i]['description'];
+                $expirationDate = getAllAuctions()[$i]['expiration_date']; //1 week from now
                 $expiresIn = $expirationDate - time();
-                
+
                 include("components/product-showcase-element.php");
             }
-            
+
         ?>
 
         <!-- to here -->
