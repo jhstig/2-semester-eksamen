@@ -24,18 +24,20 @@ if(isset($_POST['loginBtn'])) {
 }
 
 if (isset($_POST['create_firstname']) && !empty($_POST['create_firstname'])) {
-$firstname = $_POST['create_firstname'];
-$lastname = $_POST['create_surname'];
-$email = $_POST['create_email'];
-$password = $_POST['create_password'];
-$phonenumber = $_POST['phone_number'];
-$streetname = $_POST['Street_name'];
-$streetname2 = $_POST['Street_name2'];
-$zipcode = $_POST['zip_code'];
-$cityname = $_POST['City_name'];
-$housenumber = $_POST['House_number'];
+  $firstname = $_POST['create_firstname'];
+  $lastname = $_POST['create_surname'];
+  $email = $_POST['create_email'];
+  $password = $_POST['create_password'];
+  $phonenumber = $_POST['phone_number'];
+  $streetname = $_POST['Street_name'];
+  $streetname2 = $_POST['Street_name2'];
+  $zipcode = $_POST['zip_code'];
+  //$cityname = $_POST['City_name'];
+  $housenumber = $_POST['House_number'];
+  if($userexists != 1){
+    insertaddresses($streetname, $streetname2, $housenumber, $zipcode, $firstname, $lastname, $password, $email, $phonenumber);
+  }
 
-insertaddresses($streetname, $streetname2, $housenumber, $zipcode, $firstname, $lastname, $password, $email, $phonenumber);
 }
 
 
