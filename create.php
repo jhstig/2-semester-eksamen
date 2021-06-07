@@ -28,11 +28,13 @@ include("templates/profile-header.php");
             </div>
             <div class="form-group">
                 <select class="custom-select" name="cat" value="Vælg en kategori" id="inlineFormCustomSelectPref">
-                    <option selected value="">Vælg en kategori</option>
-                    <option value="2">Sofa</option>
-                    <option value="3">Bord</option>
-                    <option value="4">Reol</option>
-                    <option value="1">Stol</option>
+                    
+                    
+                    <?php
+                    $categories = getAllCats();
+                    foreach($categories as $x => $val) { ?>
+                        <option value="<?php echo getAllCats()[$x]['category_id']; ?>"><?php echo getAllCats()[$x]['category_name']; ?>
+                    <?php } ?>
                 </select>
             </div>
             <div class="form-group">
