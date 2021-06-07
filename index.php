@@ -2,8 +2,6 @@
 session_start();
 include("templates/header.php");
 
-echo $_SESSION['user'];
-
 $amountLamps = 0;
 $amountTables = 0;
 $amountChairs = 0;
