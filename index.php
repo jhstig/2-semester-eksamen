@@ -15,26 +15,24 @@ if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
         echo "<br>";
         echo "Kategorifelt: " . $_GET['cat'];
     }
-} ?>
-<?php 
-                    $categories = getAllCats();
-                    
-                    foreach($categories as $x => $val) {
-                        echo getAllCats()[$x]['category_name'] . " " . getAllCats()[$x]['category_id'] . "<br>";
-                    }
-                    
+}
+$categories = getAllCats();
+?>
 
-                    ?>
 <div class="container-fluid mt-5">
     <form action="index.php" method="get" class="form-group">
         <div class="form-row justify-content-center">
             <div class="col-md-2 form-group">
                 <select class="custom-select" name="cat" id="inlineFormCustomSelectPref">
                     <option selected value="all">Alle varer</span></option>
-                    <?php foreach($categories as $x => $val) { ?>
-                        <option value="<?php echo getAllCats()[$x]['category_id']; ?>"><?php echo getAllCats()[$x]['category_name']; ?> (<?php echo $amountChairs ?>)</option>
+                    <?php foreach($categories as $x => $val) {
+                      $selected = "";
+                      if($_GET['cat'] == getAllCats()[$x]['category_id']){
+                        $selected = "selected";
+                      } ?>
+                        <option <?php echo $selected; ?> value="<?php echo getAllCats()[$x]['category_id']; ?>"><?php echo getAllCats()[$x]['category_name']; ?> (<?php echo $amountChairs ?>)</option>
                     <?php } ?>
-                    
+
                     <!--<option value="expired">Udløbne auktioner</option>-->
                 </select>
             </div>
@@ -45,10 +43,8 @@ if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
             </div>
             <div class="col-md-1 form-group">
                 <select class="custom-select" name="sorting" id="inlineFormCustomSelectPref">
-                    <option selected value="expiration_min">Udløber snart</span></option>
-                    <option value="created_max">Nyeste først</option>
-                    <option value="price_max">Dyreste først</option>
-                    <option value="price_min">Billigste først</option>
+                    <option value="ASC">Billigste først</option>
+                    <option value="DESC">Dyreste først</option>
                 </select>
             </div>
             <div class="col-1 form-group">
@@ -62,7 +58,28 @@ if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
         <!-- loop from here -->
         <?php
         if(isset($_GET['cat'])) {
-            
+          $cat_id = $_GET['cat'];
+          $search = $_GET['search'];
+          $order = $_GET['sorting'];
+
+          $result=getCatAuctions($cat_id, $search, $order);
+          for ($i = 0; $i < count($result); $i++) {
+              $auctionid = $result[$i]['auction_id'];
+              if(count(getGreatestBid($auctionid))>0){
+                  $currentBid = getGreatestBid($auctionid)[0]['bid_amount'];
+              } else {
+                  $currentBid = $result[$i]['min_bid'];
+              }
+              $title = $result[$i]['title'];
+              $img = "img/" . $result[$i]['image'];
+              $seller = getNameFromAuction($result[$i]['auction_owner'])[0]['first_name'] . " " . getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['last_name'][0] . ".";
+              $content = $result[$i]['description'];
+              $expirationDate = $result[$i]['expiration_date']; //1 week from now
+              //$expirationDate = (new $expirationDate)->getTimestamp();
+              $expiresIn = $expirationDate - time();
+
+              include("components/product-showcase-element.php");
+          }
         } elseif(!isset($_GET['cat'])) {
             for ($i = 0; $i < count(getAllAuctions()); $i++) {
                 $auctionid = getAllAuctions()[$i]['auction_id'];
@@ -76,13 +93,13 @@ if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
                 $seller = getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['first_name'] . " " . getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['last_name'][0] . ".";
                 $content = getAllAuctions()[$i]['description'];
                 $expirationDate = getAllAuctions()[$i]['expiration_date']; //1 week from now
-                $expirationDate = (new $expirationDate)->getTimestamp();
+                //$expirationDate = (new $expirationDate)->getTimestamp();
                 $expiresIn = $expirationDate - time();
 
                 include("components/product-showcase-element.php");
             }
         }
-            
+
         ?>
         <!-- to here -->
     </div>

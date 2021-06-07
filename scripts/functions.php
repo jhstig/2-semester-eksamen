@@ -54,7 +54,7 @@ function getGreatestBid($auction) {
     INNER JOIN auctions
     ON auctions.auction_id = bids_list.auction_id
     WHERE auctions.auction_id = '$auction'
-    ORDER BY bids_list.bid_amount DESC";
+    ORDER BY bids_list.bid_amount DESC LIMIT 1";
 
   $result = mysqli_query($conn, $sql);
   $bids = [];
@@ -130,4 +130,24 @@ function getAllCats() {
     }
   }
   return $categories;
+}
+
+function getCatAuctions($cat_id, $search, $order) {
+  global $conn;
+
+  if($search == "") {
+    $sql = "SELECT * FROM auctions WHERE category_id = '$cat_id' ORDER BY min_bid $order";
+    //$sql = "SELECT auction_id, title, description, image, auction_owner, min_bid, expiration_date, category_id FROM auctions WHERE category_id = '$cat_id' ORDER BY min_bid '$order'";
+  } else {
+    //$search = "%" . $search . "%";
+    $sql = "SELECT * FROM auctions WHERE category_id = '$cat_id' AND title LIKE '%$search%' ORDER BY min_bid $order";
+  }
+  $result = mysqli_query($conn, $sql);
+  $product_list = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $product_list[] = $row;
+    }
+  }
+  return $product_list;
 }
