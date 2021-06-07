@@ -10,5 +10,4 @@
         <a href="create.php">Opret auktion</a>
       </div>
     </div>
-
 </div>
