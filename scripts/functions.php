@@ -119,3 +119,15 @@ function getUserIdByEmail($email){
   }
   return $userid;
 }
+function getAllCats() {
+  global $conn;
+  $sql = "SELECT category_id, category_name FROM categories";
+  $result = mysqli_query($conn, $sql);
+  $categories = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $categories[] = $row;
+    }
+  }
+  return $categories;
+}

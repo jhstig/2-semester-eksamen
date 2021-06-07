@@ -16,15 +16,25 @@ if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
         echo "Kategorifelt: " . $_GET['cat'];
     }
 } ?>
+<?php 
+                    $categories = getAllCats();
+                    
+                    foreach($categories as $x => $val) {
+                        echo getAllCats()[$x]['category_name'] . " " . getAllCats()[$x]['category_id'] . "<br>";
+                    }
+                    
+
+                    ?>
 <div class="container-fluid mt-5">
     <form action="index.php" method="get" class="form-group">
         <div class="form-row justify-content-center">
             <div class="col-md-2 form-group">
                 <select class="custom-select" name="cat" id="inlineFormCustomSelectPref">
                     <option selected value="all">Alle varer</span></option>
-                    <option value="chairs">Stole (<?php echo $amountChairs ?>)</option>
-                    <option value="lamps">Lamper (<?php echo $amountLamps ?>)</option>
-                    <option value="tables">Borde (<?php echo $amountTables ?>)</option>
+                    <?php foreach($categories as $x => $val) { ?>
+                        <option value="<?php echo getAllCats()[$x]['category_id']; ?>"><?php echo getAllCats()[$x]['category_name']; ?> (<?php echo $amountChairs ?>)</option>
+                    <?php } ?>
+                    
                     <!--<option value="expired">Udløbne auktioner</option>-->
                 </select>
             </div>
