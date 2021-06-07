@@ -151,3 +151,13 @@ function getCatAuctions($cat_id, $search, $order) {
   }
   return $product_list;
 }
+
+function insertauction($title, $description, $image, $min_bid, $expiration_date, $category_id, $auctionOwner){
+  global $conn;
+  $sql = "INSERT INTO auctions (
+        auction_id, title, description, image, min_bid, expiration_date, category_id, auction_owner)
+  VALUES (null, '$title', '$description', '$image', '$min_bid', '$expiration_date', '$category_id', '$auctionOwner')";
+
+  $result = mysqli_query($conn, $sql);
+
+}

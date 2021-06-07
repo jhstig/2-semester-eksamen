@@ -53,6 +53,8 @@ $categories = getAllCats();
         </div>
     </form>
 </div>
+<?php //echo date('Y-m-d H:i:s'); ?>
+
 <div class="container-fluid">
     <div class="row justify-content-center">
         <!-- loop from here -->
@@ -94,8 +96,11 @@ $categories = getAllCats();
                 $content = getAllAuctions()[$i]['description'];
                 $expirationDate = getAllAuctions()[$i]['expiration_date']; //1 week from now
                 //$expirationDate = (new $expirationDate)->getTimestamp();
-                $expiresIn = $expirationDate - time();
+                $expiresIn = strtotime($expirationDate)-strtotime(date("now"));
+                //$expiresIn =  //- date('Y-m-d H:i:s');
+                //mktime(date('H'),date('i'),date('s'),date('n'),date('j'),date('y'));
 
+//$dif = strtotime($curdate) - strtotime($mysqlTimestamp);
                 include("components/product-showcase-element.php");
             }
         }
