@@ -30,9 +30,8 @@ $categories = getAllCats();
                       if($_GET['cat'] == getAllCats()[$x]['category_id']){
                         $selected = "selected";
                       } ?>
-                        <option <?php echo $selected; ?> value="<?php echo getAllCats()[$x]['category_id']; ?>"><?php echo getAllCats()[$x]['category_name']; ?> (<?php echo $amountChairs ?>)</option>
+                        <option <?php echo $selected; ?> value="<?php echo getAllCats()[$x]['category_id']; ?>"><?php echo getAllCats()[$x]['category_name']; ?> (<?php echo countAmountByCategory(getAllCats()[$x]['category_id'])[0]['COUNT(category_id)'] ?>)</option>
                     <?php } ?>
-
                     <!--<option value="expired">Udløbne auktioner</option>-->
                 </select>
             </div>
@@ -94,13 +93,9 @@ $categories = getAllCats();
                 $img = "img/" . getAllAuctions()[$i]['image'];
                 $seller = getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['first_name'] . " " . getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['last_name'][0] . ".";
                 $content = getAllAuctions()[$i]['description'];
-                $expirationDate = getAllAuctions()[$i]['expiration_date']; //1 week from now
-                //$expirationDate = (new $expirationDate)->getTimestamp();
+                $expirationDate = getAllAuctions()[$i]['expiration_date'];
                 $expiresIn = strtotime($expirationDate)-strtotime(date("now"));
-                //$expiresIn =  //- date('Y-m-d H:i:s');
-                //mktime(date('H'),date('i'),date('s'),date('n'),date('j'),date('y'));
-
-//$dif = strtotime($curdate) - strtotime($mysqlTimestamp);
+                
                 include("components/product-showcase-element.php");
             }
         }

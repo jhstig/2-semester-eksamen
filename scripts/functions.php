@@ -64,7 +64,6 @@ function getGreatestBid($auction) {
     }
   }
   return $bids;
-
 }
 
 function getCity($zip) {
@@ -159,5 +158,88 @@ function insertauction($title, $description, $image, $min_bid, $expiration_date,
   VALUES (null, '$title', '$description', '$image', '$min_bid', '$expiration_date', '$category_id', '$auctionOwner')";
 
   $result = mysqli_query($conn, $sql);
+
+}
+function countAmountByCategory($cat_id){
+  global $conn;
+  $sql = "SELECT COUNT(category_id) FROM auctions WHERE category_id = '$cat_id'";
+  
+  $result = mysqli_query($conn, $sql);
+  $list = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $list[] = $row;
+    }
+  }
+  return $list;
+}
+function getCityByZip($zip){
+  global $conn;
+  $sql = "SELECT city_name FROM zip_codes WHERE zip_code = '$zip'";
+  
+  $result = mysqli_query($conn, $sql);
+  $city = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $city[] = $row;
+    }
+  }
+  return $city;
+}
+function getUserDetails($userid){
+  global $conn;
+  $sql = "SELECT first_name, last_name, email, phone_number, address_id FROM users WHERE user_id = '$userid'";
+  
+  $result = mysqli_query($conn, $sql);
+  $user = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $user[] = $row;
+    }
+  }
+  return $user;
+}
+function getAdressByUser($adressId){
+  global $conn;
+  $sql = "SELECT street_name, street_name2, house_number, zip_code FROM adresses WHERE address_id = '$adressId'";
+  
+  $result = mysqli_query($conn, $sql);
+  $adress = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $adress[] = $row;
+    }
+  }
+  return $adress;
+}
+
+
+function updateUser($streetname, $streetname2, $housenumber, $zipcode, $firstname, $lastname, $password, $email, $phonenumber, $currAddressId, $userid){
+  global $conn;
+  
+  $sql = "INSERT INTO adresses (address_id, street_name, street_name2, house_number, zip_code)
+  VALUES (null, '$streetname', '$streetname2', '$housenumber', '$zipcode')";
+
+  $result = mysqli_query($conn, $sql);
+  $lastid = mysqli_insert_id($conn);
+
+  $sql = "DELETE FROM adresses WHERE address_id = '$currAddressId'";
+  $result = mysqli_query($conn, $sql);
+
+  $sql = "UPDATE users 
+  SET first_name = '$firstname', last_name = '$lastname',  email = '$email', phone_number = '$phonenumber', address_id = '$lastid'
+  WHERE user_id = '$userid'";
+
+  $result = mysqli_query($conn, $sql);
+
+  if($password != ""){
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $sql = "UPDATE users 
+    SET password = '$hashedPassword'
+    WHERE user_id = '$userid'";
+
+    $result = mysqli_query($conn, $sql);
+  }
+
 
 }

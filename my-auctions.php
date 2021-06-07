@@ -2,6 +2,11 @@
 session_start();
 include("templates/header.php");
 include("templates/profile-header.php");
+
+if($_SESSION['user'] == ""){
+  header("Location: index.php");
+  exit();
+}
 ?>
 <div class="container-fluid">
   <h5 class="text-center font-weight-bold bg-light">Mine auktioner</h5>

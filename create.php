@@ -2,6 +2,10 @@
 session_start();
 include("templates/header.php");
 include("templates/profile-header.php");
+if($_SESSION['user'] == ""){
+  header("Location: index.php");
+  exit();
+}
 $message ="";
 if(isset($_FILES['image'])) {
   $errors= array();
