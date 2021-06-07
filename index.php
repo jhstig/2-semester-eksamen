@@ -52,23 +52,29 @@ if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
 <div class="container-fluid">
     <div class="row justify-content-center">
         <!-- loop from here -->
-        <?php echo count(getAllAuctions());
+        <?php
+        if(isset($_GET['cat'])) {
+            
+        } elseif(!isset($_GET['cat'])) {
             for ($i = 0; $i < count(getAllAuctions()); $i++) {
                 $auctionid = getAllAuctions()[$i]['auction_id'];
                 if(count(getGreatestBid($auctionid))>0){
-                  $currentBid = getGreatestBid($auctionid)[0]['bid_amount'];
+                    $currentBid = getGreatestBid($auctionid)[0]['bid_amount'];
                 } else {
-                  $currentBid = getAllAuctions()[$i]['min_bid'];
+                    $currentBid = getAllAuctions()[$i]['min_bid'];
                 }
                 $title = getAllAuctions()[$i]['title'];
                 $img = "img/" . getAllAuctions()[$i]['image'];
                 $seller = getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['first_name'] . " " . getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['last_name'][0] . ".";
                 $content = getAllAuctions()[$i]['description'];
                 $expirationDate = getAllAuctions()[$i]['expiration_date']; //1 week from now
+                $expirationDate = (new $expirationDate)->getTimestamp();
                 $expiresIn = $expirationDate - time();
 
                 include("components/product-showcase-element.php");
             }
+        }
+            
         ?>
         <!-- to here -->
     </div>

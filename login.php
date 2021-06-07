@@ -5,13 +5,25 @@ session_start();
 $_SESSION['user'] = null;
 include("templates/header.php");
 
-
-if(isset($_POST['login_email']) && isset($_POST['login_password']) && !empty($_POST['login_password']) && !empty($_POST['login_email'])){
-    $_SESSION['user'] = $_POST['login_email'];
-
-    header("Location: index.php");
-    exit;
+$loginMessage = null;
+debug(getUserByEmail($_POST['create_email']));
+if(isset($_POST['loginBtn'])) { 
+  echo "1";
+  if(count(getUserByEmail($_POST['create_email']))>0){
+    echo "2";
+    if(password_verify($_POST['create_password'], getUserByEmail($_POST['create_email'])[0]['password'])) {
+        $_SESSION['user'] = getUserIdByEmail($_POST['create_email'])[0]['user_id'];
+        echo $_SESSION['user'];
+        header("Location: index.php");
+        exit();
+    } else {
+      $loginMessage = "Kodeordet er forkert, eller brugeren eksisterer ikke";
+    }
+  } else {
+    $loginMessage = "Kodeordet er forkert, eller brugeren eksisterer ikke";
+  }
 }
+
 if (isset($_POST['create_firstname']) && !empty($_POST['create_firstname'])) {
 $firstname = $_POST['create_firstname'];
 $lastname = $_POST['create_surname'];
@@ -74,7 +86,7 @@ insertaddresses($streetname, $streetname2, $housenumber, $zipcode, $firstname, $
                 <div class="form-group">
                   <input name="City_name" type="cityname" class="form-control" placeholder="By"required>
                 </div>
-                <div class="form-group"><div class="form-group"><button type="submit" class="btn btn-block">Opret bruger</button></div></div>
+                <div class="form-group"><div class="form-group"><button type="submit" name="loginBtn" class="btn btn-block">Opret bruger</button></div></div>
             </form>
         </div>
     </div>

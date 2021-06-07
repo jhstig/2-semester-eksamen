@@ -82,6 +82,7 @@ function getCity($zip) {
 
 function insertaddresses($streetname, $streetname2, $housenumber, $zipcode, $firstname, $lastname, $password, $email, $phonenumber){
   global $conn;
+  $hashedPassword = password_hash($password,1);
   $sql = "INSERT INTO adresses (address_id, street_name, street_name2, house_number, zip_code)
   VALUES (null, '$streetname', '$streetname2', '$housenumber', '$zipcode')";
 
@@ -89,8 +90,32 @@ function insertaddresses($streetname, $streetname2, $housenumber, $zipcode, $fir
   $lastid = mysqli_insert_id($conn);
 
   $sql = "INSERT INTO users (user_id, first_name, last_name, password, email, phone_number, address_id)
-  VALUES (null, '$firstname', '$lastname', '$password', '$email', '$phonenumber','$lastid')";
+  VALUES (null, '$firstname', '$lastname', '$$hashedPassword', '$email', '$phonenumber','$lastid')";
 
   $result = mysqli_query($conn, $sql);
 
+}
+function getUserByEmail($email){
+  global $conn;
+  $sql = "SELECT password FROM users WHERE email = '$email'";
+  $result = mysqli_query($conn, $sql);
+  $password = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $password[] = $row;
+    }
+  }
+  return $password;
+}
+function getUserIdByEmail($email){
+  global $conn;
+  $sql = "SELECT user_id FROM users WHERE email = '$email";
+  $result = mysqli_query($conn, $sql);
+  $userid = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $userid[] = $row;
+    }
+  }
+  return $userid;
 }
