@@ -16,9 +16,9 @@ if(isset($_FILES['image'])) {
 
 
 
-  if($file_size > 2097152){
+  /*if($file_size > 2097152){
      $errors[]='Filen skal være mindre end 2 MB';
-  }
+  }*/
 
   if(empty($errors)==true){
      move_uploaded_file($file_tmp,"img/".$file_name);

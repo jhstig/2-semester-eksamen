@@ -243,3 +243,10 @@ function updateUser($streetname, $streetname2, $housenumber, $zipcode, $firstnam
 
 
 }
+function placeBid($auction_id, $bid_amount, $bid_owner){
+  global $conn;
+  $sql = "INSERT INTO bids_list (auction_id, bid_amount, bid_owner, created_at) VALUES ($auction_id, $bid_amount, $bid_owner, CURRENT_TIMESTAMP)";
+  
+  $result = mysqli_query($conn, $sql);
+
+}

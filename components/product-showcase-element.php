@@ -1,5 +1,6 @@
 <?php
 $expired = 0;
+
 ?>
 <div class="col-md-3 m-4 border rounded" style="background-color:white;">
     <div class="row">
@@ -21,18 +22,9 @@ $expired = 0;
         <div class="col text-center">
             Sælger: <span><?php echo $seller; ?></span>
             <br>
-            Auktionen udløber om
+            Udløber om
             <?php
-                if($expiresIn/60/60 >= 24) {
-                    echo round($expiresIn/60/60/24) . " dage";
-                } elseif($expiresIn/60/60 >= 1) {
-                    echo round($expiresIn/60/60) . " timer";
-                } elseif($expiresIn/60 >= 1) {
-                    round($expiresIn/60) . " minutter";
-                } else {
-                    echo "Auktionen er udløbet";
-                    $expired = 1;
-                }
+                echo $expiresIn;
             ?>
         </div>
     </div>
@@ -49,16 +41,17 @@ $expired = 0;
             <?php if($_SESSION['user'] != null) {?>
                 <div class="row">
                     <div class="col">
-                        <form action="index.php" type="post" class="form-group">
+                        <form action="bid.php" method="POST" class="form-group">
+                            <input name="auctionid" type="hidden" value="<?php echo $auctionid;?>">
                             <div class="form-group row justify-content-around">
                                 <label for="userBid" class="col-1 col-form-label">kr.</label>
-                                <input class="col-10 form-control" type="number" name="amount" id="userBid" placeholder="Afgiv et bud" value="<?php echo $currentBid+5; ?>" required>
+                                <input class="col-10 form-control" type="number" name="formBid" id="userBid" placeholder="Afgiv et bud" value="<?php echo $currentBid+1; ?>" required>
                             </div>
                             <div class="form-group form-check text-center">
-                                <input class="form-check-input" type="checkbox" value="" id="confirmBid<?php echo $i; ?>" required>
-                                <label class="form-check-label" for="confirmBid<?php echo $i; ?>">Mit bud er bindende</label>
+                                <input class="form-check-input" type="checkbox" id="<?php echo $auctionid; ?>" required>
+                                <label class="form-check-label" for="<?php echo $auctionid; ?>">Mit bud er bindende</label>
                             </div>
-                            <button type="submit" class="btn-block btn btn-primary <?php if($expired){echo "disabled";}?>" <?php if($expired){echo "disabled";}?>>Afgiv bud</button>
+                            <button type="submit" name="formBtn" class="btn-block btn btn-primary <?php if($expired){echo "disabled";}?>" <?php if($expired){echo "disabled";}?>>Afgiv bud</button>
                         </form>
                     </div>
                 </div>

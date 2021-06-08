@@ -54,6 +54,7 @@ $categories = getAllCats();
 </div>
 <?php //echo date('Y-m-d H:i:s'); ?>
 
+
 <div class="container-fluid">
     <div class="row justify-content-center">
         <!-- loop from here -->
@@ -82,9 +83,14 @@ $categories = getAllCats();
               include("components/product-showcase-element.php");
           }
         } elseif(!isset($_GET['cat'])) {
+            
+                
+
             for ($i = 0; $i < count(getAllAuctions()); $i++) {
+
+                
                 $auctionid = getAllAuctions()[$i]['auction_id'];
-                if(count(getGreatestBid($auctionid))>0){
+                if(count(getGreatestBid($auctionid))>0 && getGreatestBid($auctionid)[0]['bid_amount']>getAllAuctions()[$i]['min_bid']){
                     $currentBid = getGreatestBid($auctionid)[0]['bid_amount'];
                 } else {
                     $currentBid = getAllAuctions()[$i]['min_bid'];
@@ -94,7 +100,10 @@ $categories = getAllCats();
                 $seller = getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['first_name'] . " " . getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['last_name'][0] . ".";
                 $content = getAllAuctions()[$i]['description'];
                 $expirationDate = getAllAuctions()[$i]['expiration_date'];
-                $expiresIn = strtotime($expirationDate)-strtotime(date("now"));
+                $expirationDate = new DateTime($expirationDate);
+                $timeNow = new DateTime();
+                $expiresIn = $timeNow->diff($expirationDate);
+                $expiresIn = $expiresIn->format('%D dage, %H timer og %I minutter');
                 
                 include("components/product-showcase-element.php");
             }
