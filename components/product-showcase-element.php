@@ -1,6 +1,8 @@
 <?php
 $expired = 0;
-
+if($expiresIn<0){
+    $expired = 1;
+}
 ?>
 <div class="col-md-3 m-4 border rounded" style="background-color:white;">
     <div class="row">
@@ -51,7 +53,7 @@ $expired = 0;
                                 <input class="form-check-input" type="checkbox" id="<?php echo $auctionid; ?>" required>
                                 <label class="form-check-label" for="<?php echo $auctionid; ?>">Mit bud er bindende</label>
                             </div>
-                            <button type="submit" name="formBtn" class="btn-block btn btn-primary <?php if($expired){echo "disabled";}?>" <?php if($expired){echo "disabled";}?>>Afgiv bud</button>
+                            <button type="submit" name="formBtn" class="btn-block btn btn-primary <?php if($expired){echo "disabled";}?>" <?php if($expired){echo "disabled";}?>><?php if($expired){echo "Auktionen er udløbet";}else{echo "Afgiv bud";}?></button>
                         </form>
                     </div>
                 </div>

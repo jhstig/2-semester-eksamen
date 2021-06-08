@@ -1,6 +1,5 @@
 <?php
 $conn;
-
 function connect() { //connect to DB
     global $conn; //set var to global
     $conn = mysqli_connect(DBHOST, DBUSER, DBPASS); //mysqli_connect(host,user,pw)
@@ -49,7 +48,7 @@ function getNameFromAuction($id) {
 
 function getGreatestBid($auction) {
   global $conn;
-  $sql = "SELECT bids_list.bid_amount
+  $sql = "SELECT bids_list.bid_amount /*bids_list.bid_owner*/
     FROM bids_list
     INNER JOIN auctions
     ON auctions.auction_id = bids_list.auction_id
@@ -130,6 +129,7 @@ function getAllCats() {
   }
   return $categories;
 }
+
 
 function getCatAuctions($cat_id, $search, $order) {
   global $conn;
@@ -249,4 +249,52 @@ function placeBid($auction_id, $bid_amount, $bid_owner){
   
   $result = mysqli_query($conn, $sql);
 
+}
+function getUsersAuctions($user_id){
+  global $conn;
+  $sql = "SELECT auction_id FROM auctions WHERE auction_owner = '$user_id'";
+  $result = mysqli_query($conn, $sql);
+  $auctions = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $auctions[] = $row;
+    }
+  }
+  return $auctions;
+}
+function getUsersCurrentBids($user_id){
+  global $conn;
+  $sql = "SELECT auction_id FROM bids_list WHERE bid_owner = '$user_id' ORDER BY bid_amount DESC";
+  $result = mysqli_query($conn, $sql);
+  $auctions = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $auctions[] = $row;
+    }
+  }
+  return $auctions;
+}
+function getUsersCurrentBidsByAuction($user_id, $auction_id){
+  global $conn;
+  $sql = "SELECT auction_id FROM bids_list WHERE auction_owner = '$user_id'";
+  $result = mysqli_query($conn, $sql);
+  $auctions = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $auctions[] = $row;
+    }
+  }
+  return $auctions;
+}
+function getWonAuctionsByUser($user_id){
+  global $conn;
+  $sql = "SELECT auction_id FROM auctions WHERE won_by = '$user_id'";
+  $result = mysqli_query($conn, $sql);
+  $won = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $won[] = $row;
+    }
+  }
+  return $won;
 }

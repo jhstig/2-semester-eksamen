@@ -1,5 +1,6 @@
 <?php
 session_start();
+$fanTitle = "Auktioner";
 include("templates/header.php");
 
 $amountLamps = 0;
@@ -17,6 +18,7 @@ if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
     }
 }
 $categories = getAllCats();
+
 ?>
 
 <div class="container-fluid mt-5">
@@ -113,7 +115,11 @@ $categories = getAllCats();
         <!-- to here -->
     </div>
 </div>
+<?php 
+debug(getUsersCurrentBids($_SESSION['user']));
 
+
+?>
 
 
 

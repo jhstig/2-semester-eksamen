@@ -1,6 +1,10 @@
 <?php
     session_start();
     include("templates/header.php");
+    include("scripts/globals.php");
+    $test;
+    $test = "testertester";
+
     if(isset($_POST['formBtn'])){
         $bid_amount = $_POST['formBid'];
         $auction_id = $_POST['auctionid'];

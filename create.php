@@ -8,24 +8,14 @@ if($_SESSION['user'] == ""){
 }
 $message ="";
 if(isset($_FILES['image'])) {
-  $errors= array();
   $file_name = $_FILES['image']['name'];
   $file_size =$_FILES['image']['size'];
   $file_tmp =$_FILES['image']['tmp_name'];
   $file_type=$_FILES['image']['type'];
 
-
-
-  /*if($file_size > 2097152){
-     $errors[]='Filen skal være mindre end 2 MB';
-  }*/
-
-  if(empty($errors)==true){
-     move_uploaded_file($file_tmp,"img/".$file_name);
-     $message = "Din auktion er blevet oprettet!";
-  }else{
-     print_r($errors);
-  }
+  move_uploaded_file($file_tmp,"img/".$file_name);
+  $message = "Din auktion er blevet oprettet!";
+  
 }
 
 if (isset($_POST['auction-btn'])) {
@@ -36,8 +26,6 @@ if (isset($_POST['auction-btn'])) {
   $expiration_date = $_POST['expiration_date'];
   $category_id = $_POST['cat'];
   $auctionOwner = $_SESSION['user'];
-
-
 
   insertauction($title, $description, $image, $min_bid, $expiration_date, $category_id, $auctionOwner);
 }
