@@ -111,13 +111,6 @@ if($_SESSION['user'] == ""){
       $added[] = $bidsByUser[$x]['auction_id'];
     }
   }
-  if(count($added)>0){
-    for($i = 1; $i < count($added);$i++){
-      if(in_array($i)){
-        //$errors[]='Filen skal være mindre end 2 MB';
-     }
-    }
-  }
   
   if(count(getWonAuctionsByUser($_SESSION['user']))>0){
     for($i = 1; count(getWonAuctionsByUser($_SESSION['user']));$i++){
