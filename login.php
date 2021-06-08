@@ -1,6 +1,7 @@
 
 <?php
 $fanTitle = "Login";
+$createMessage = "";
 session_start();
 $_SESSION['user'] = null;
 include("templates/header.php");
@@ -34,8 +35,14 @@ if (isset($_POST['create_firstname']) && !empty($_POST['create_firstname'])) {
   $zipcode = $_POST['zip_code'];
   //$cityname = $_POST['City_name'];
   $housenumber = $_POST['House_number'];
+    $userexists = 0;
+  if(count(getUserIdByEmail($email))>0){
+    $userexists = 1;
+    $createMessage = "Der findes allerede en bruger med den brugte mail!";
+  }
   if($userexists != 1){
     insertaddresses($streetname, $streetname2, $housenumber, $zipcode, $firstname, $lastname, $password, $email, $phonenumber);
+    $createMessage = "Du har oprettet en bruger!";
   }
 
 }
@@ -54,10 +61,12 @@ if (isset($_POST['create_firstname']) && !empty($_POST['create_firstname'])) {
             </form>
         </div>
         <div class="col-md-6 ikea-yellow-bg pt-5">
-            <span class="h3 font-weight-bold ikea-blue-text">INGEN BRUGER? OPRET EN</span>
+            <span class="h3 font-weight-bold ikea-blue-text">INGEN BRUGER? OPRET EN <?php echo "<br>" . $createMessage; ?></span>
+            
             <form action="login.php" method="post" class="mt-4" >
                 <div class="row form-group justify-content-around">
                     <div class="col-6">
+                        
                         <input name="create_firstname" type="text" class="form-control" placeholder="Fornavn" required>
                     </div>
                     <div class="col-6">
