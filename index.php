@@ -2,11 +2,8 @@
 session_start();
 $fanTitle = "Auktioner";
 include("templates/header.php");
+$expired;
 
-$amountLamps = 0;
-$amountTables = 0;
-$amountChairs = 0;
-$currentTime = $_SERVER['REQUEST_TIME'];
 if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
     if($_GET['search'] == ""){
         echo "du har ikke søgt efter noget <br> ";
@@ -34,7 +31,6 @@ $categories = getAllCats();
                       } ?>
                         <option <?php echo $selected; ?> value="<?php echo getAllCats()[$x]['category_id']; ?>"><?php echo getAllCats()[$x]['category_name']; ?> (<?php echo countAmountByCategory(getAllCats()[$x]['category_id'])[0]['COUNT(category_id)'] ?>)</option>
                     <?php } ?>
-                    <!--<option value="expired">Udløbne auktioner</option>-->
                 </select>
             </div>
             <div class="col-md-5 form-group">
@@ -62,64 +58,44 @@ $categories = getAllCats();
         <!-- loop from here -->
         <?php
         if(isset($_GET['cat'])) {
-          $cat_id = $_GET['cat'];
-          $search = $_GET['search'];
-          $order = $_GET['sorting'];
-
-          $result=getCatAuctions($cat_id, $search, $order);
-          for ($i = 0; $i < count($result); $i++) {
-              $auctionid = $result[$i]['auction_id'];
-              if(count(getGreatestBid($auctionid))>0){
-                  $currentBid = getGreatestBid($auctionid)[0]['bid_amount'];
-              } else {
-                  $currentBid = $result[$i]['min_bid'];
-              }
-              $title = $result[$i]['title'];
-              $img = "img/" . $result[$i]['image'];
-              $seller = getNameFromAuction($result[$i]['auction_owner'])[0]['first_name'] . " " . getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['last_name'][0] . ".";
-              $content = $result[$i]['description'];
-              $expirationDate = $result[$i]['expiration_date']; //1 week from now
-              //$expirationDate = (new $expirationDate)->getTimestamp();
-              $expiresIn = $expirationDate - time();
-
-              include("components/product-showcase-element.php");
-          }
+            $cat_id = $_GET['cat'];
+            $search = $_GET['search'];
+            $order = $_GET['sorting'];
+            $result = getCatAuctions($cat_id, $search, $order);
         } elseif(!isset($_GET['cat'])) {
-            
-                
-
-            for ($i = 0; $i < count(getAllAuctions()); $i++) {
-
-                
-                $auctionid = getAllAuctions()[$i]['auction_id'];
-                if(count(getGreatestBid($auctionid))>0 && getGreatestBid($auctionid)[0]['bid_amount']>getAllAuctions()[$i]['min_bid']){
-                    $currentBid = getGreatestBid($auctionid)[0]['bid_amount'];
-                } else {
-                    $currentBid = getAllAuctions()[$i]['min_bid'];
-                }
-                $title = getAllAuctions()[$i]['title'];
-                $img = "img/" . getAllAuctions()[$i]['image'];
-                $seller = getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['first_name'] . " " . getNameFromAuction(getAllAuctions()[$i]['auction_owner'])[0]['last_name'][0] . ".";
-                $content = getAllAuctions()[$i]['description'];
-                $expirationDate = getAllAuctions()[$i]['expiration_date'];
-                $expirationDate = new DateTime($expirationDate);
-                $timeNow = new DateTime();
-                $expiresIn = $timeNow->diff($expirationDate);
-                $expiresIn = $expiresIn->format('%D dage, %H timer og %I minutter');
-                
-                include("components/product-showcase-element.php");
+            $result = getAllAuctions();
+        }
+        for ($i = 0; $i < count($result); $i++) {
+            $auctionid = $result[$i]['auction_id'];
+            if(count(getGreatestBid($auctionid))>0 && getGreatestBid($auctionid)[0]['bid_amount']>$result[$i]['min_bid']){
+                $currentBid = getGreatestBid($auctionid)[0]['bid_amount'];
+            } else {
+                $currentBid = $result[$i]['min_bid'];
             }
+            $title = $result[$i]['title'];
+            $img = "img/" . $result[$i]['image'];
+            $seller = getNameFromAuction($result[$i]['auction_owner'])[0]['first_name'] . " " . getNameFromAuction($result[$i]['auction_owner'])[0]['last_name'][0] . ".";
+            $content = $result[$i]['description'];
+            $expirationDate = $result[$i]['expiration_date'];
+            $expirationDate = new DateTime($expirationDate);
+            $timeNow = new DateTime();
+            if($timeNow < $expirationDate){
+                $expiresIn = $timeNow->diff($expirationDate);
+                $expiresIn = $expiresIn->format('Udløber om %D dage, %H timer og %I minutter');
+                $expired = 0;
+            } else {
+                $expiresIn = "Auktionen er udløbet";
+                $expired = 1;
+            }
+            
+            include("components/product-showcase-element.php");
         }
 
         ?>
         <!-- to here -->
     </div>
 </div>
-<?php 
-debug(getUsersCurrentBids($_SESSION['user']));
 
-
-?>
 
 
 

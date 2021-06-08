@@ -135,11 +135,11 @@ function getCatAuctions($cat_id, $search, $order) {
   global $conn;
 
   if($search == "") {
-    $sql = "SELECT * FROM auctions WHERE category_id = '$cat_id' ORDER BY min_bid $order";
-    //$sql = "SELECT auction_id, title, description, image, auction_owner, min_bid, expiration_date, category_id FROM auctions WHERE category_id = '$cat_id' ORDER BY min_bid '$order'";
+    $sql = "SELECT auction_id, title, description, image, auction_owner, min_bid, expiration_date, category_id FROM auctions WHERE category_id = '$cat_id' ORDER BY min_bid $order";
+    //$sql = "SELECT  FROM auctions WHERE category_id = '$cat_id' ORDER BY min_bid '$order'";
   } else {
     //$search = "%" . $search . "%";
-    $sql = "SELECT * FROM auctions WHERE category_id = '$cat_id' AND title LIKE '%$search%' ORDER BY min_bid $order";
+    $sql = "SELECT auction_id, title, description, image, auction_owner, min_bid, expiration_date, category_id FROM auctions WHERE category_id = '$cat_id' AND title LIKE '%$search%' ORDER BY min_bid $order";
   }
   $result = mysqli_query($conn, $sql);
   $product_list = [];
@@ -297,4 +297,28 @@ function getWonAuctionsByUser($user_id){
     }
   }
   return $won;
+}
+function getAuctionDetailsById($auction_id){
+  global $conn;
+  $sql = "SELECT image, title, description, won_by, expiration_date FROM auctions WHERE auction_id = '$auction_id'";
+  $result = mysqli_query($conn, $sql);
+  $details = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $details[] = $row;
+    }
+  }
+  return $details;
+}
+function getUsersCurrentBidOnAuction($user_id, $auction_id){
+  global $conn;
+  $sql = "SELECT bid_amount FROM bids_list WHERE bid_owner = '$user_id' and auction_id='$auction_id' ORDER BY bid_amount DESC LIMIT 1";
+  $result = mysqli_query($conn, $sql);
+  $auctions = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $auctions[] = $row;
+    }
+  }
+  return $auctions;
 }

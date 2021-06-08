@@ -1,9 +1,4 @@
-<?php
-$expired = 0;
-if($expiresIn<0){
-    $expired = 1;
-}
-?>
+
 <div class="col-md-3 m-4 border rounded" style="background-color:white;">
     <div class="row">
         <div class="col text-center mt-3">
@@ -24,10 +19,7 @@ if($expiresIn<0){
         <div class="col text-center">
             Sælger: <span><?php echo $seller; ?></span>
             <br>
-            Udløber om
-            <?php
-                echo $expiresIn;
-            ?>
+            <?php echo $expiresIn; ?>
         </div>
     </div>
     <div class="row">
@@ -36,10 +28,10 @@ if($expiresIn<0){
                 <div class="col text-center my-2">
                     <span class="mb-2">
                         Bud: <?php echo $currentBid; ?> kr.
-
                     </span>
                 </div>
             </div>
+            
             <?php if($_SESSION['user'] != null) {?>
                 <div class="row">
                     <div class="col">
@@ -53,7 +45,7 @@ if($expiresIn<0){
                                 <input class="form-check-input" type="checkbox" id="<?php echo $auctionid; ?>" required>
                                 <label class="form-check-label" for="<?php echo $auctionid; ?>">Mit bud er bindende</label>
                             </div>
-                            <button type="submit" name="formBtn" class="btn-block btn btn-primary <?php if($expired){echo "disabled";}?>" <?php if($expired){echo "disabled";}?>><?php if($expired){echo "Auktionen er udløbet";}else{echo "Afgiv bud";}?></button>
+                            <button type="submit" name="formBtn" class="btn-block btn btn-primary <?php if($expired == TRUE){echo "disabled";}?>" <?php if($expired == TRUE){echo "disabled";}?>><?php if($expired){echo "Auktionen er udløbet";}else{echo "Afgiv bud";}?></button>
                         </form>
                     </div>
                 </div>

@@ -10,9 +10,8 @@ if($_SESSION['user'] == ""){
 ?>
 <div class="container">
     <div class="row">
-      <div class="col h5 text-center font-weight-bold bg-light">
-        Mine auktioner
-
+      <div class="col h5 text-center font-weight-bold bg-light rounded">
+        Dine auktioner
       </div>
     </div>
     <div class="row justify-content-center">
@@ -39,7 +38,7 @@ if($_SESSION['user'] == ""){
         <div class="row">
           <div class="col mt-2">
             <div class="font-weight-bold">
-            Pris
+            Højeste bud: 100 kr.
             </div>
           </div>
         </div>
@@ -50,25 +49,24 @@ if($_SESSION['user'] == ""){
             </div>
           </div>
         </div>
+      </div>
     </div>
-  </div>
-
-
-<hr>
-<div class="container-fluid">
-<h5 class="text-center font-weight-bold ikea-yellow-bg">Auktioner du har budt på eller vundet</h5>
-  <div class="col mt-3">
-
-
-  </div>
   </div>
 </div>
 
+<hr>
+<div class="container">
+  <div class="row">
+    <div class="col h5 text-center font-weight-bold ikea-yellow-bg rounded">
+      Auktioner du har budt på eller vundet
+    </div>
+  </div>
+</div>
 <div class="container bg-light pt-4 rounded">
   <div class="row">
     <div class="col-6">
       <div class="font-weight-bold">
-      Senest vundne
+      Vundne/budte auktioner
       </div>
     </div>
     <div class="col-2">
@@ -97,34 +95,40 @@ if($_SESSION['user'] == ""){
       $title = "Titel";
       $description = "beskrivelse";
       $price = 200;
-      $status = "Vundet";
+      $status = "Du har vundet auktionen";
       $end_time = "dato";
       include("components/won-lost.php");
     }
   }
-  debug(getUsersCurrentBids($_SESSION['user']));
+  //debug(getUsersCurrentBids($_SESSION['user']));
   $bidsByUser = getUsersCurrentBids($_SESSION['user']);
   $added = array();
   foreach($bidsByUser as $x => $val){
     if(!in_array($bidsByUser[$x]['auction_id'], $added)){
-      echo $bidsByUser[$x]['auction_id'];
       $added[] = $bidsByUser[$x]['auction_id'];
     }
   }
-  
-  if(count(getWonAuctionsByUser($_SESSION['user']))>0){
-    for($i = 1; count(getWonAuctionsByUser($_SESSION['user']));$i++){
-      $img ="placeholder.png";
-      $title = "Titel";
-      $description = "beskrivelse";
-      $price = 200;
-      $status = "Budt";
+  if(count($added)>0){
+    foreach($added as $x => $val){
+      $img = getAuctionDetailsById($val)[0]['image'];
+      $title = getAuctionDetailsById($val)[0]['title'];
+      $description = getAuctionDetailsById($val)[0]['description'];
+      
+      $price =  getUsersCurrentBidOnAuction($_SESSION['user'], $val)[0]['bid_amount'];
+   
+      
+      //getUsersCurrentBids($_SESSION['user'])[0]['bid_amount'];
+
+      if(getGreatestBid($val)[0]['bid_amount']==$price){
+        $status = "Du har det højeste bud";
+      } else {
+        $status = "Du er blevet overbudt";
+      }
+      
       $end_time = "dato";
       include("components/won-lost.php");
     }
   }
-
-      
   ?>
 </div>
 
