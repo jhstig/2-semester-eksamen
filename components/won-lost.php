@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="col-2">
-      <?php echo "Du har budt " . $price . " kr" ?>
+      <?php echo $price ?>
     </div>
     <div class="col-2">
       <?php echo $status ?>

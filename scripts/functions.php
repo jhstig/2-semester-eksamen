@@ -67,7 +67,7 @@ function getGreatestBid($auction) {
 
 function getCity($zip) {
   global $conn;
-  $sql = "SELECT city_name FROM zip_codes WHERE zip_code = '$zip'";
+  $sql = "SELECT city_name FROM zip_codes WHERE zip_code = '$zip' LIMIT 1";
   $city = [];
   if(mysqli_num_rows($result)>0) {
     while($row = mysqli_fetch_assoc($result)) {
@@ -75,7 +75,6 @@ function getCity($zip) {
     }
   }
   return $city;
-
 }
 
 function insertaddresses($streetname, $streetname2, $housenumber, $zipcode, $firstname, $lastname, $password, $email, $phonenumber){
@@ -153,9 +152,10 @@ function getCatAuctions($cat_id, $search, $order) {
 
 function insertauction($title, $description, $image, $min_bid, $expiration_date, $category_id, $auctionOwner){
   global $conn;
-  $sql = "INSERT INTO auctions (
-        auction_id, title, description, image, min_bid, expiration_date, category_id, auction_owner)
-  VALUES (null, '$title', '$description', '$image', '$min_bid', '$expiration_date', '$category_id', '$auctionOwner')";
+  $sql = "INSERT INTO auctions 
+  (auction_id, title, description, image, min_bid, expiration_date, category_id, auction_owner)
+  VALUES
+  (null, '$title', '$description', '$image', '$min_bid', '$expiration_date', '$category_id', '$auctionOwner')";
 
   $result = mysqli_query($conn, $sql);
 
@@ -321,4 +321,115 @@ function getUsersCurrentBidOnAuction($user_id, $auction_id){
     }
   }
   return $auctions;
+}
+function getAuctionsOwnedByUser($user_id){
+  global $conn;
+  $sql = "SELECT auction_id FROM auctions WHERE auction_owner = '$user_id'";
+  $result = mysqli_query($conn, $sql);
+  $auctions = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $auctions[] = $row;
+    }
+  }
+  return $auctions;
+}
+function getMinBid($auction_id){
+  global $conn;
+  $sql = "SELECT min_bid FROM auctions WHERE auction_id = '$auction_id'";
+  $result = mysqli_query($conn, $sql);
+  $auctions = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $auctions[] = $row;
+    }
+  }
+  return $auctions;
+}
+function deleteAuction($auction_id){
+  global $conn;
+  $sql = "DELETE FROM auctions WHERE auction_id = '$auction_id'";
+  $result = mysqli_query($conn, $sql);
+}
+function getCountOfBidsByAuction($auction_id){
+  global $conn;
+  $sql = "SELECT COUNT(bid_amount) FROM bids_list WHERE auction_id = '$auction_id'";
+  $result = mysqli_query($conn, $sql);
+  $count = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $count[] = $row;
+    }
+  }
+  return $count;
+}
+function updateWinner($auction_id, $user_id){
+  global $conn;
+  $sql = "UPDATE auctions
+  SET won_by = '$user_id'
+  WHERE auction_id = '$auction_id'";
+  //$sql = "INSERT INTO auctions (won_by) VALUES ('$user_id') WHERE auction_id = '$auction_id'";
+  $result = mysqli_query($conn, $sql);
+}
+function getGreatestBidUser($auction) {
+  global $conn;
+  $sql = "SELECT bids_list.bid_owner /*bids_list.bid_owner*/
+    FROM bids_list
+    INNER JOIN auctions
+    ON auctions.auction_id = bids_list.auction_id
+    WHERE auctions.auction_id = '$auction'
+    ORDER BY bids_list.bid_amount DESC LIMIT 1";
+
+  $result = mysqli_query($conn, $sql);
+  $owner = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $owner[] = $row;
+    }
+  }
+  return $owner;
+}
+function checkIfWon($auction_id) {
+  global $conn;
+  $sql = "SELECT won_by FROM auctions WHERE auction_id = '$auction_id'";
+  $result = mysqli_query($conn, $sql);
+  $winner = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $winner[] = $row;
+    }
+  }
+  return $winner;
+}
+function getPhoneFromAuction($user_id) {
+  global $conn;
+  $sql = 'SELECT users.phone_number
+  FROM users
+  INNER JOIN auctions
+  ON users.user_id = auctions.won_by
+  WHERE users.user_id = "'.$user_id.'"';
+
+  $result = mysqli_query($conn, $sql);
+  $phone = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $phone[] = $row;
+    }
+  }
+  return $phone;
+
+}
+function getAdressId($user_id) {
+  global $conn;
+  $sql = "SELECT address_id FROM users WHERE user_id = '$user_id'";
+
+  $result = mysqli_query($conn, $sql);
+  $adressid = [];
+  if(mysqli_num_rows($result)>0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $adressid[] = $row;
+    }
+  }
+  return $adressid;
+
 }

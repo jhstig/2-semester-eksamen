@@ -50,8 +50,6 @@ $categories = getAllCats();
         </div>
     </form>
 </div>
-<?php //echo date('Y-m-d H:i:s'); ?>
-
 
 <div class="container-fluid">
     <div class="row justify-content-center">
@@ -82,16 +80,19 @@ $categories = getAllCats();
             if($timeNow < $expirationDate){
                 $expiresIn = $timeNow->diff($expirationDate);
                 $expiresIn = $expiresIn->format('Udløber om %D dage, %H timer og %I minutter');
-                $expired = 0;
+                
+                include("components/product-showcase-element.php");
             } else {
-                $expiresIn = "Auktionen er udløbet";
-                $expired = 1;
+                
+                if(count(getGreatestBidUser($auctionid))>0){
+                    if(checkIfWon($auctionid)[0]['won_by'] == null){
+                        updateWinner($auctionid, getGreatestBidUser($auctionid)[0]['bid_owner']);
+                    }
+                }
             }
             
-            include("components/product-showcase-element.php");
-        }
-
-        ?>
+            
+        } ?>
         <!-- to here -->
     </div>
 </div>

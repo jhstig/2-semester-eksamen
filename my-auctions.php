@@ -14,42 +14,44 @@ if($_SESSION['user'] == ""){
         Dine auktioner
       </div>
     </div>
-    <div class="row justify-content-center">
-      <div class="col-md-3 bg-light rounded">
-        <div class="row">
-          <div class="col mt-3 text-center">
-            <img src="img/placeholder.png" alt="" class="img-thumbnail">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col mt-3">
-            <span class="font-weight-bold h3">
-              Titel
-            </span>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col mt-2">
-            <div class="font-weight-bold">
-            Beskrivelse
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col mt-2">
-            <div class="font-weight-bold">
-            Højeste bud: 100 kr.
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col my-2 ">
-            <div class="font-weight-bold">
-            Udløbsdato
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="row justify-content-around">
+      <?php
+      $ownAuctions = getAuctionsOwnedByUser($_SESSION['user']);
+      foreach($ownAuctions as $x => $val){
+        $auction_id = $ownAuctions[$x]['auction_id'];
+        $img = getAuctionDetailsById($auction_id)[0]['image'];
+        $title = getAuctionDetailsById($auction_id)[0]['title'];
+        $description = getAuctionDetailsById($auction_id)[0]['description'];
+        if(count(getGreatestBid($auction_id))>0){
+          $price = getGreatestBid($auction_id)[0]['bid_amount'];
+        } else {
+          $price = getMinBid($auction_id)[0]['min_bid'];
+        }
+        //$price = getGreatestBid($auction_id)[0]['bid_amount'];
+        $end_time = getAuctionDetailsById($auction_id)[0]['expiration_date'];
+        if(checkIfWon($auction_id)[0]['won_by'] != null){
+          $winner = checkIfWon($auction_id)[0]['won_by'];
+          $wonBy = getNameFromAuction($winner)[0]['first_name'];
+          $wonBy = $wonBy . " " . getNameFromAuction($winner)[0]['last_name'];
+          $adressID = getAdressId($winner)[0]['address_id'];
+          $winnerAdressDetails = getAdressByUser($adressID);
+          $winnerCity = getCityByZip($winnerAdressDetails[0]['zip_code'])[0]['city_name'];
+          $telephone = getPhoneFromAuction($winner)[0]['phone_number']; 
+          
+          $address = $wonBy . "<br>" . $winnerAdressDetails[0]['street_name'] . " " . $winnerAdressDetails[0]['house_number'] . "<br>" . $winnerAdressDetails[0]['zip_code'] . " " . $winnerCity . "<br>" . $telephone;
+          
+          
+          
+          
+        } else {
+          $wonBy = "";
+        }
+
+        include("components/own-auctions.php");
+      } ?>
+
+      
+      <?php ?>
     </div>
   </div>
 </div>
@@ -89,23 +91,29 @@ if($_SESSION['user'] == ""){
   </div>
   <hr>
   <?php
-  if(count(getWonAuctionsByUser($_SESSION['user']))>0){
-    for($i = 1; $i < count(getWonAuctionsByUser($_SESSION['user']));$i++){
-      $img ="placeholder.png";
-      $title = "Titel";
-      $description = "beskrivelse";
-      $price = 200;
-      $status = "Du har vundet auktionen";
-      $end_time = "dato";
+  $wonAuctions = getWonAuctionsByUser($_SESSION['user']);
+  if(count($wonAuctions)>0){
+    foreach($wonAuctions as $x => $val){
+      $auctionid = $wonAuctions[$x]['auction_id'];
+      $img = getAuctionDetailsById($auctionid)[0]['image'];
+      $title = getAuctionDetailsById($auctionid)[0]['title'];
+      $description = getAuctionDetailsById($auctionid)[0]['description'];
+      $price = "Du har vundet med budet ".getGreatestBid($auctionid)[0]['bid_amount']." kr";
+      $status = "Vundet";
+      $end_time = getAuctionDetailsById($auctionid)[0]['expiration_date'];
+      
       include("components/won-lost.php");
     }
   }
-  //debug(getUsersCurrentBids($_SESSION['user']));
+
   $bidsByUser = getUsersCurrentBids($_SESSION['user']);
   $added = array();
   foreach($bidsByUser as $x => $val){
-    if(!in_array($bidsByUser[$x]['auction_id'], $added)){
-      $added[] = $bidsByUser[$x]['auction_id'];
+    $auctionid = $bidsByUser[$x]['auction_id'];
+    if(checkIfWon($auctionid)[0]['won_by'] != $_SESSION['user']){ //tjekker at auktionen ikke er vundet af brugeren der er logget ind, så den ikke kommer ind i added-array
+      if(!in_array($bidsByUser[$x]['auction_id'], $added)){
+        $added[] = $bidsByUser[$x]['auction_id'];
+      }
     }
   }
   if(count($added)>0){
@@ -113,19 +121,19 @@ if($_SESSION['user'] == ""){
       $img = getAuctionDetailsById($val)[0]['image'];
       $title = getAuctionDetailsById($val)[0]['title'];
       $description = getAuctionDetailsById($val)[0]['description'];
-      
-      $price =  getUsersCurrentBidOnAuction($_SESSION['user'], $val)[0]['bid_amount'];
-   
-      
-      //getUsersCurrentBids($_SESSION['user'])[0]['bid_amount'];
-
-      if(getGreatestBid($val)[0]['bid_amount']==$price){
-        $status = "Du har det højeste bud";
+      $price = "Du har budt " . getUsersCurrentBidOnAuction($_SESSION['user'], $val)[0]['bid_amount'] . " kr.";
+      if(checkIfWon($val)[0]['won_by'] == null) { //tjekker at auktionen ikke er vundet af en anden
+        if(getGreatestBid($val)[0]['bid_amount']==$price){
+          $status = "Du har det højeste bud";
+        } else {
+          $status = "Du er blevet overbudt";
+        }
       } else {
-        $status = "Du er blevet overbudt";
+        $status = "Du har tabt auktionen";
       }
       
-      $end_time = "dato";
+      
+      $end_time = getAuctionDetailsById($val)[0]['expiration_date'];
       include("components/won-lost.php");
     }
   }
