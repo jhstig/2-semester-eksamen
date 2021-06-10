@@ -7,6 +7,7 @@
         $auction_id = $_POST['auctionid'];
         $bid_owner = $_SESSION['user'];
         placeBid($auction_id, $bid_amount, $bid_owner);
+        $bidMessage = "Test";
     }
     
     Header("location: index.php");
