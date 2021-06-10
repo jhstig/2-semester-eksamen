@@ -4,16 +4,6 @@ $fanTitle = "Auktioner";
 include("templates/header.php");
 $expired;
 
-if(isset($_GET['search']) && isset($_GET['cat']) && isset($_GET['sorting'])){
-    if($_GET['search'] == ""){
-        echo "du har ikke søgt efter noget <br> ";
-        echo "Du har søgt efter kategorien: " . $_GET['cat'];
-    } else {
-        echo "Søgefelt: " . $_GET['search'];
-        echo "<br>";
-        echo "Kategorifelt: " . $_GET['cat'];
-    }
-}
 $categories = getAllCats();
 
 ?>
