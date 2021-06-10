@@ -10,7 +10,7 @@ if($inclDB == true) {
     define('DBHOST', 'localhost');
     define('DBPASS', 'root');
     define('DBUSER', 'root');
-    define('DBNAME', 'mydb');
+    define('DBNAME', 'ikeadb');
 
     connect();
 }
