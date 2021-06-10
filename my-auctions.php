@@ -14,7 +14,7 @@ if($_SESSION['user'] == ""){
         Dine auktioner
       </div>
     </div>
-    <div class="row justify-content-between">
+    <div class="row justify-content-around">
       <?php
       $ownAuctions = getAuctionsOwnedByUser($_SESSION['user']);
       foreach($ownAuctions as $x => $val){

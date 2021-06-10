@@ -24,7 +24,7 @@ if(isset($_FILES['image'])) {
 if (isset($_POST['auction-btn'])) {
   $title = $_POST['title'];
   $description = $_POST['description'];
-  $image = $_FILES['image']['name'];
+  $image = $file_name;
   $min_bid = $_POST['min_price'];
   $expiration_date = $_POST['expiration_date'];
   $category_id = $_POST['cat'];
@@ -39,7 +39,7 @@ if (isset($_POST['auction-btn'])) {
     insertauction($title, $description, $image, $min_bid, $expiration_date, $category_id, $auctionOwner);
     $message = "Din auktion er blevet oprettet!";
   }
-    
+
 }
 ?>
 <div class="container">
