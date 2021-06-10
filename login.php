@@ -7,13 +7,13 @@ $_SESSION['user'] = null;
 include("templates/header.php");
 
 $loginMessage = null;
-if(isset($_POST['loginBtn'])) { 
+if(isset($_POST['loginBtn'])) {
   $passString = $_POST['login_password'];
   if(count(getPasswordByEmail($_POST['login_email']))>0){
     $passHashed = getPasswordByEmail($_POST['login_email'])[0]['password'];
     if(password_verify($passString, $passHashed)) {
         $_SESSION['user'] = getUserIdByEmail($_POST['login_email'])[0]['user_id'];
-        
+
         header('Location: index.php');
         exit();
     } else {
@@ -25,6 +25,7 @@ if(isset($_POST['loginBtn'])) {
 }
 
 if (isset($_POST['create_firstname']) && !empty($_POST['create_firstname'])) {
+  if(strlen($_POST['phone_number'])==8) {
   $firstname = $_POST['create_firstname'];
   $lastname = $_POST['create_surname'];
   $email = $_POST['create_email'];
@@ -44,7 +45,9 @@ if (isset($_POST['create_firstname']) && !empty($_POST['create_firstname'])) {
     insertaddresses($streetname, $streetname2, $housenumber, $zipcode, $firstname, $lastname, $password, $email, $phonenumber);
     $createMessage = "Du har oprettet en bruger!";
   }
-
+} else {
+  $createMessage = "Hov! Der gik noget galt med dit telefonnummer";
+}
 }
 
 
@@ -62,11 +65,11 @@ if (isset($_POST['create_firstname']) && !empty($_POST['create_firstname'])) {
         </div>
         <div class="col-md-6 ikea-yellow-bg pt-5">
             <span class="h3 font-weight-bold ikea-blue-text">INGEN BRUGER? OPRET EN <?php echo "<br>" . $createMessage; ?></span>
-            
+
             <form action="login.php" method="post" class="mt-4" >
                 <div class="row form-group justify-content-around">
                     <div class="col-6">
-                        
+
                         <input name="create_firstname" type="text" class="form-control" placeholder="Fornavn" required>
                     </div>
                     <div class="col-6">

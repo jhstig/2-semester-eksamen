@@ -13,8 +13,10 @@ if($_SESSION['user'] == ""){
   exit();
 }
 if(isset($_POST['updateBtn'])){
+  if(strlen($_POST['phone_number'])==8) {
   updateUser($_POST['Street_name'], $_POST['street_name2'], $_POST['House_number'], $_POST['zip_code'], $_POST['firstname'], $_POST['surname'], $_POST['password'], $_POST['email'], $_POST['phone_number'], $userDetails[0]['address_id'], $_SESSION['user']);
   header("Refresh:0");
+  }
 }
 ?>
 
@@ -52,14 +54,14 @@ if(isset($_POST['updateBtn'])){
               <div class="col-4">
                 <input name="House_number" type="House_number" class="form-control" placeholder="Hus nr." value="<?php echo $adressDetails[0]['house_number'] ?>" required>
               </div>
-              
-              
+
+
             </div>
               <div class="form-group">
                 <input name="street_name2" type="address" class="form-control" placeholder="Adresse 2" value="<?php echo $adressDetails[0]['street_name2']; ?>">
             </div>
             <div class="form-group">
-              
+
             </div>
             <div class="form-group">
               <input name="zip_code" type="zipcode" class="form-control" placeholder="Postnummer" value="<?php echo $adressDetails[0]['zip_code']; ?>" required>

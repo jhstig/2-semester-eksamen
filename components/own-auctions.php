@@ -1,5 +1,5 @@
-    
-<div class="col-md-3 bg-light rounded">
+
+<div class="col-md-3 m-4 bg-light rounded">
     <div class="row">
         <div class="col mt-3 text-center">
             <img src="img/<?php echo $img; ?>" alt="" class="img-thumbnail">
@@ -33,10 +33,8 @@
                 if(strlen($wonBy)>0){
                     echo "<br>Vundet af: <br>".$address;
                 } ?>
-                
+
             </div>
         </div>
     </div>
 </div>
-
-

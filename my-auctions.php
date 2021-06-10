@@ -14,7 +14,7 @@ if($_SESSION['user'] == ""){
         Dine auktioner
       </div>
     </div>
-    <div class="row justify-content-around">
+    <div class="row justify-content-between">
       <?php
       $ownAuctions = getAuctionsOwnedByUser($_SESSION['user']);
       foreach($ownAuctions as $x => $val){
@@ -36,13 +36,13 @@ if($_SESSION['user'] == ""){
           $adressID = getAdressId($winner)[0]['address_id'];
           $winnerAdressDetails = getAdressByUser($adressID);
           $winnerCity = getCityByZip($winnerAdressDetails[0]['zip_code'])[0]['city_name'];
-          $telephone = getPhoneFromAuction($winner)[0]['phone_number']; 
-          
+          $telephone = getPhoneFromAuction($winner)[0]['phone_number'];
+
           $address = $wonBy . "<br>" . $winnerAdressDetails[0]['street_name'] . " " . $winnerAdressDetails[0]['house_number'] . "<br>" . $winnerAdressDetails[0]['zip_code'] . " " . $winnerCity . "<br>" . $telephone;
-          
-          
-          
-          
+
+
+
+
         } else {
           $wonBy = "";
         }
@@ -50,7 +50,7 @@ if($_SESSION['user'] == ""){
         include("components/own-auctions.php");
       } ?>
 
-      
+
       <?php ?>
     </div>
   </div>
@@ -101,7 +101,7 @@ if($_SESSION['user'] == ""){
       $price = "Du har vundet med budet ".getGreatestBid($auctionid)[0]['bid_amount']." kr";
       $status = "Vundet";
       $end_time = getAuctionDetailsById($auctionid)[0]['expiration_date'];
-      
+
       include("components/won-lost.php");
     }
   }
@@ -131,8 +131,8 @@ if($_SESSION['user'] == ""){
       } else {
         $status = "Du har tabt auktionen";
       }
-      
-      
+
+
       $end_time = getAuctionDetailsById($val)[0]['expiration_date'];
       include("components/won-lost.php");
     }
